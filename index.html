@@ -25,7 +25,312 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"
     />
 
-
+    <!-- Custom Modal & Contact Form CSS -->
+    <style>
+        /* Image Modal Styles */
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0);
+            opacity: 0;
+            transition: background-color 0.6s ease, opacity 0.6s ease;
+        }
+        
+        .modal.show {
+            display: flex;
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            max-width: 80%;
+            max-height: 80vh;
+            margin: auto;
+            position: relative;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: transform 0.6s cubic-bezier(0.33, 0.85, 0.4, 0.96), opacity 0.6s ease;
+            background-color: var(--eerie-black);
+            border-radius: var(--radius-5);
+            overflow: hidden;
+        }
+        
+        .modal.show .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .modal-image-container {
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+        
+        .modal-info {
+            padding: 20px;
+            color: var(--white);
+        }
+        
+        .modal-title {
+            font-family: var(--ff-recoleta);
+            font-size: var(--fs-6);
+            margin-bottom: 10px;
+        }
+        
+        .modal-subtitle {
+            color: var(--white_a70);
+            font-size: var(--fs-9);
+            font-weight: var(--fw-300);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            color: var(--white);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            transition: background-color 0.3s, transform 0.3s;
+            z-index: 11;
+        }
+        
+        .modal-close:hover {
+            background-color: var(--radical-red);
+            transform: scale(1.1);
+        }
+        /* Contact Form Modal Styles */
+        
+        .contact-modal .modal-content {
+            max-width: 600px;
+            width: 90%;
+            background-color: var(--eerie-black);
+            padding: 30px;
+        }
+        
+        .contact-form {
+            width: 100%;
+        }
+        
+        .contact-form .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .contact-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: var(--fw-500);
+            color: var(--white);
+        }
+        
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--white_a15);
+            border: 1px solid var(--white_a25);
+            border-radius: var(--radius-5);
+            color: var(--white);
+            font-family: var(--ff-gordita);
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+        
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            outline: none;
+            background-color: var(--white_a25);
+            border-color: var(--radical-red);
+        }
+        
+        .contact-form textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .contact-modal-title {
+            color: var(--white);
+            font-family: var(--ff-recoleta);
+            font-size: var(--fs-4);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .contact-modal-subtitle {
+            color: var(--white_a70);
+            font-size: var(--fs-9);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .submit-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background-color: var(--radical-red);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-5);
+            font-weight: var(--fw-500);
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background-color: #ff2e63;
+            transform: translateY(-3px);
+        }
+        /* Social links section */
+        
+        .social-contact-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.3s;
+        }
+        
+        .social-contact-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .social-contact-link {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: var(--white_a15);
+            border-radius: var(--radius-25);
+            transition: background-color 0.3s;
+            font-weight: var(--fw-500);
+            gap: 10px;
+        }
+        
+        .social-contact-link i {
+            font-size: 20px;
+        }
+        
+        .social-contact-link.whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        
+        .social-contact-link.whatsapp-group {
+            background-color: #128C7E;
+            color: white;
+        }
+        
+        .social-contact-link.linkedin {
+            background-color: #0077B5;
+            color: white;
+        }
+        
+        .social-contact-link.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+        
+        .social-contact-link.email {
+            background-color: var(--radical-red);
+            color: white;
+        }
+        /* Make gallery items clickable with hover effect */
+        
+        .gallery-card {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-card:hover {
+            transform: translateY(-5px);
+        }
+        /* Success message for form submission */
+        
+        .form-success {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(46, 204, 113, 0.2);
+            border-radius: var(--radius-5);
+            margin-top: 20px;
+        }
+        
+        .form-success.show {
+            display: block;
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Footer contact button */
+        
+        .contact-btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background-color: var(--radical-red);
+            color: var(--white);
+            border-radius: var(--radius-5);
+            font-weight: var(--fw-500);
+            margin-top: 30px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+            border: none;
+            font-size: var(--fs-9);
+        }
+        
+        .contact-btn:hover {
+            background-color: #ff2e63;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        /* Responsive adjustments */
+        
+        @media (max-width: 768px) {
+            .modal-content {
+                max-width: 95%;
+            }
+            .social-contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+            .contact-modal .modal-content {
+                padding: 15px;
+            }
+        }
+    </style>
 </head>
 
 
@@ -136,209 +441,16 @@
                             <strong class="strong" data-letter-effect>Photographer</strong>
                             <strong class="strong" data-letter-effect>Shutterbug</strong>
                             <strong class="strong" data-letter-effect>Cameraman</strong>
-                            <strong class="strong" data-letter-effect>Pixel Perfect</strong>
+                            <strong class="strong" data-letter-effect>Pacific Portraits</strong>
                         </div>
 
-                        <p class="hero-text">20+ Years Of Experience</p>
+                        <p class="hero-text">15+ Years Of Experience</p>
 
                     </div>
 
                 </div>
 
                 <img src="./assets//images/hero-shape.svg" width="211" height="189" alt="" class="shape">
-            </section>
-
-            <!-- GALLERY -->
-            <section class="section gallery" id="gallery">
-                <div class="container">
-
-                    <ul class="gallery-list">
-
-                        <li class="gallery-item" data-reveal>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-1.jpg" width="450" height="625" alt="The Drunken" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">The Drunken</a>
-                                    </h3>
-
-                                    <span class="card-tag">Food, Event</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-2.jpg" width="450" height="625" alt="Lettuce Entertain" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Lettuce Entertain</a>
-                                    </h3>
-
-                                    <span class="card-tag">Landscape</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                        </li>
-
-                        <li class="gallery-item" data-reveal>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-3.jpg" width="450" height="625" alt="Leaping Lizard" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Leaping Lizard</a>
-                                    </h3>
-
-                                    <span class="card-tag">Model, Fashion</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-4.jpg" width="450" height="625" alt="Juan More Taco" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Juan More Taco</a>
-                                    </h3>
-
-                                    <span class="card-tag">Architecture, Event</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                        </li>
-
-                        <li class="gallery-item" data-reveal>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-5.jpg" width="450" height="625" alt="Goldilox Bagels" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Goldilox Bagels</a>
-                                    </h3>
-
-                                    <span class="card-tag">People, Film</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-6.jpg" width="450" height="625" alt="Cookie Monstah" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Cookie Monstah</a>
-                                    </h3>
-
-                                    <span class="card-tag">Wedding, Event</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                        </li>
-
-                        <li class="gallery-item" data-reveal>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-7.jpg" width="450" height="625" alt="Divine Pastabilities" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">Divine Pastabilities</a>
-                                    </h3>
-
-                                    <span class="card-tag">Wedding, Model</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                            <div class="gallery-card">
-
-                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
-                                    <img src="./assets/images/gallery-8.jpg" width="450" height="625" alt="The Lockhart Bar" class="img-cover">
-                                </figure>
-
-                                <div class="card-content">
-                                    <h3 class="h6">
-                                        <a href="#" class="card-title">The Lockhart Bar</a>
-                                    </h3>
-
-                                    <span class="card-tag">Health & Wellnes</span>
-                                </div>
-
-                                <a href="#" class="btn-icon">
-                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                                </a>
-
-                            </div>
-
-                        </li>
-
-                    </ul>
-
-                    <a href="#service" class="scroll-down">
-                        <img src="./assets/images/scroll-down.svg" width="40" height="66" loading="lazy" alt="mouse scroll">
-                    </a>
-
-                    <img src="./assets//images/hero-shape.svg" width="220" height="78" alt="" class="shape">
-
-                </div>
             </section>
 
             <!-- WORKSHOPS -->
@@ -408,14 +520,198 @@
                             </div>
                         </li>
                     </ul>
-
-                    <!-- <a href="#gallery" class="scroll-down">
-                        <img src="./assets/images/scroll-down.svg" width="40" height="66" loading="lazy" alt="mouse scroll">
-                    </a> -->
                 </div>
             </section>
 
 
+            <!-- GALLERY -->
+            <section class="section gallery" id="gallery">
+                <div class="container">
+
+                    <ul class="gallery-list">
+
+                        <li class="gallery-item" data-reveal>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-1.jpg" data-modal-title="The Drunken" data-modal-subtitle="A creative food photography project showcasing the art of mixology and food pairing">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-1.jpg" width="450" height="625" alt="The Drunken" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">The Drunken</a>
+                                    </h3>
+
+                                    <span class="card-tag">Food, Event</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-2.jpg" data-modal-title="Lettuce Entertain" data-modal-subtitle="Exploring the beauty of natural landscapes through the lens of seasonal change">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-2.jpg" width="450" height="625" alt="Lettuce Entertain" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Lettuce Entertain</a>
+                                    </h3>
+
+                                    <span class="card-tag">Landscape</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                        </li>
+
+                        <li class="gallery-item" data-reveal>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-3.jpg" data-modal-title="Leaping Lizard" data-modal-subtitle="Fashion photography that captures the essence of dynamic movement and elegance">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-3.jpg" width="450" height="625" alt="Leaping Lizard" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Leaping Lizard</a>
+                                    </h3>
+
+                                    <span class="card-tag">Model, Fashion</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-4.jpg" data-modal-title="Juan More Taco" data-modal-subtitle="Architectural studies blended with event photography for a unique perspective">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-4.jpg" width="450" height="625" alt="Juan More Taco" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Juan More Taco</a>
+                                    </h3>
+
+                                    <span class="card-tag">Architecture, Event</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                        </li>
+
+                        <li class="gallery-item" data-reveal>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-5.jpg" data-modal-title="Goldilox Bagels" data-modal-subtitle="People photography with film techniques to capture authentic moments">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-5.jpg" width="450" height="625" alt="Goldilox Bagels" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Goldilox Bagels</a>
+                                    </h3>
+
+                                    <span class="card-tag">People, Film</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-6.jpg" data-modal-title="Cookie Monstah" data-modal-subtitle="Wedding event photography focusing on candid moments and emotional storytelling">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-6.jpg" width="450" height="625" alt="Cookie Monstah" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Cookie Monstah</a>
+                                    </h3>
+
+                                    <span class="card-tag">Wedding, Event</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                        </li>
+
+                        <li class="gallery-item" data-reveal>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-7.jpg" data-modal-title="Divine Pastabilities" data-modal-subtitle="Wedding model photography showcasing divine beauty in natural settings">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-7.jpg" width="450" height="625" alt="Divine Pastabilities" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">Divine Pastabilities</a>
+                                    </h3>
+
+                                    <span class="card-tag">Wedding, Model</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                            <div class="gallery-card" data-modal-image="./assets/images/gallery-8.jpg" data-modal-title="The Lockhart Bar" data-modal-subtitle="Health and wellness photography focused on mindfulness and natural beauty">
+
+                                <figure class="card-banner img-holder has-before" style="--width: 450; --height: 625;">
+                                    <img src="./assets/images/gallery-8.jpg" width="450" height="625" alt="The Lockhart Bar" class="img-cover">
+                                </figure>
+
+                                <div class="card-content">
+                                    <h3 class="h6">
+                                        <a href="#" class="card-title">The Lockhart Bar</a>
+                                    </h3>
+
+                                    <span class="card-tag">Health & Wellnes</span>
+                                </div>
+
+                                <a href="#" class="btn-icon">
+                                    <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
+                                </a>
+
+                            </div>
+
+                        </li>
+
+                    </ul>
+
+                    <img src="./assets//images/hero-shape.svg" width="220" height="78" alt="" class="shape">
+
+                </div>
+            </section>
 
 
             <!-- CATEGORY -->
@@ -707,14 +1003,14 @@
                                     Amet consectetur adipisicing elit
                                 </p>
                             </div>
-
+                            <!-- 
                             <a href="#" class="btn-icon" aria-label="See more">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="43" height="20" viewBox="0 0 43 20" fill="none">
                                                       <path d="M0 10H41" stroke="white" stroke-width="2" /><path 
                                                       d="M33 1L41.9 10.2727L33 19" 
                                                       stroke="white" stroke-width="2" />
                                                 </svg>
-                            </a>
+                            </a> -->
 
                         </div>
                     </li>
@@ -734,7 +1030,7 @@
 
                             <h2 class="h2 section-title portfolio-label" data-reveal>My Recent Work.</h2>
 
-                            <div class="portfolio-card" data-reveal>
+                            <div class="portfolio-card" data-reveal data-modal-image="./assets/images/portfolio-1.jpg" data-modal-title="Shoe Promo" data-modal-subtitle="Professional product photography highlighting design and craftsmanship">
 
                                 <figure class="card-banner img-holder has-before" style="--width: 700; --height: 605;">
                                     <img src="./assets/images/portfolio-1.jpg" width="700" height="605" alt="Shoe Promo" loading="lazy" class="img-cover">
@@ -757,7 +1053,7 @@
 
                             </div>
 
-                            <div class="portfolio-card" data-reveal>
+                            <div class="portfolio-card" data-reveal data-modal-image="./assets/images/portfolio-2.jpg" data-modal-title="Wedding Shot" data-modal-subtitle="Capturing intimate moments and emotions from the special day">
 
                                 <figure class="card-banner img-holder has-before" style="--width: 700; --height: 1091;">
                                     <img src="./assets/images/portfolio-2.jpg" width="700" height="1091" alt="Wedding Shot" loading="lazy" class="img-cover">
@@ -784,7 +1080,7 @@
 
                         <div class="wrapper">
 
-                            <div class="portfolio-card" data-reveal>
+                            <div class="portfolio-card" data-reveal data-modal-image="./assets/images/portfolio-3.jpg" data-modal-title="Fashion Show" data-modal-subtitle="High-end fashion photography showcasing designer collections and runway moments">
 
                                 <figure class="card-banner img-holder has-before" style="--width: 700; --height: 1000;">
                                     <img src="./assets/images/portfolio-3.jpg" width="700" height="1000" alt="Fashion Show" loading="lazy" class="img-cover">
@@ -797,17 +1093,17 @@
 
                                     <p class="card-tag">Fashion, Model</p>
                                 </div>
-
+                                <!-- 
                                 <a href="#" class="btn-icon" aria-label="See more">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="43" height="20" viewBox="0 0 43 20" fill="none">
                                                             <path d="M0 10H41" stroke="black" stroke-width="2" /><path 
                                                             d="M33 1L41.9 10.2727L33 19" stroke="black" stroke-width="2" />
                                                       </svg>
-                                </a>
+                                </a> -->
 
                             </div>
 
-                            <div class="portfolio-card" data-reveal>
+                            <div class="portfolio-card" data-reveal data-modal-image="./assets/images/portfolio-4.jpg" data-modal-title="Jumbo Burger" data-modal-subtitle="Food photography that makes your mouth water with perfect lighting and composition">
 
                                 <figure class="card-banner img-holder has-before" style="--width: 700; --height: 850;">
                                     <img src="./assets/images/portfolio-4.jpg" width="700" height="850" alt="Jumbo Burger" loading="lazy" class="img-cover">
@@ -852,9 +1148,9 @@
                             Work inquiry, Job opportunities? Send Message.
                         </h2>
 
-                        <a href="#" class="btn-icon" data-reveal>
-                            <img src="./assets/images/arrow-forward.svg" width="43" height="20" loading="lazy" alt="arrow-forward icon">
-                        </a>
+                        <button class="contact-btn" id="openContactModal" data-reveal>
+                                          Get In Touch
+                                    </button>
 
                         <img src="./assets/images/footer-1.jpg" width="159" height="176" loading="lazy" alt="photography" class="abs-img abs-img-1" data-reveal>
 
@@ -870,25 +1166,25 @@
 
                 <div class="footer-bottom">
                     <div class="container">
-                        <!-- LINKS -->
+
                         <a href="#" class="logo">
                             <img src="./assets/images/logo.svg" width="40" height="40" loading="lazy" alt="Arindam home">
                         </a>
 
-                        <a href="https://github.com/Ayash-Bera" target="_blank" class="copyright"><i class="fa-brands fa-github"></i> Ayash-Bera</a>
+                        <a href="https://github.com/Ayash-Bera" target="_blank" class="copyright"><i class="fa-brands fa-github"></i> Prakhar-002</a>
 
                         <ul class="social-list">
 
                             <li>
-                                <a href="https://www.linkedin.com/" target="_blank" class="social-link"><i class="fa-brands fa-linkedin"></i></a>
+                                <a href="https://www.linkedin.com/in/prakhar002/" target="_blank" class="social-link"><i class="fa-brands fa-linkedin"></i></a>
                             </li>
 
                             <li>
-                                <a href="https://leetcode.com/" target="_blank" class="social-link"><i class="fa-solid fa-whatsapp"></i></a>
+                                <a href="https://leetcode.com/u/Prakhar-002/" target="_blank" class="social-link"><i class="fa-solid fa-splotch"></i></a>
                             </li>
 
                             <li>
-                                <a href="mailto:pixelphotoexhibition@gmail.com" target="_blank" class="social-link"><i class="fa-solid fa-envelope"></i></a>
+                                <a href="mailto:prakhar.katiyar.002@gmail.com" target="_blank" class="social-link"><i class="fa-solid fa-envelope"></i></a>
                             </li>
 
                         </ul>
@@ -902,6 +1198,85 @@
 
             </footer>
 
+            <!-- Image Modal -->
+            <div class="modal" id="imageModal">
+                <div class="modal-content">
+                    <span class="modal-close">&times;</span>
+                    <div class="modal-image-container">
+                        <img src="" alt="" class="modal-image" id="modalImage">
+                    </div>
+                    <div class="modal-info">
+                        <h3 class="modal-title" id="modalTitle"></h3>
+                        <p class="modal-subtitle" id="modalSubtitle"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Form Modal -->
+            <div class="modal contact-modal" id="contactModal">
+                <div class="modal-content">
+                    <span class="modal-close" id="closeContactModal">&times;</span>
+                    <h3 class="contact-modal-title">Get In Touch</h3>
+                    <p class="contact-modal-subtitle">Send me a message and I'll get back to you as soon as possible</p>
+
+                    <form class="contact-form" id="contactForm" onsubmit="submitContactForm(event)">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Your Message</label>
+                            <textarea id="message" name="message" required></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">Send Message</button>
+                        <div class="form-success" id="formSuccess">
+                            <p>Thank you for your message! I'll get back to you soon.</p>
+                        </div>
+                    </form>
+
+                    <!-- Social Media Links -->
+                    <div class="social-contact-links">
+                        <div class="social-contact-item">
+                            <a href="https://wa.me/1234567890" class="social-contact-link whatsapp" target="_blank">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>WhatsApp Me</span>
+                            </a>
+                        </div>
+                        <div class="social-contact-item">
+                            <a href="https://chat.whatsapp.com/AbCdEfGhIjKl" class="social-contact-link whatsapp-group" target="_blank">
+                                <i class="fa-brands fa-whatsapp"></i>
+                                <span>Join WhatsApp Group</span>
+                            </a>
+                        </div>
+                        <div class="social-contact-item">
+                            <a href="https://www.instagram.com/yourprofile" class="social-contact-link instagram" target="_blank">
+                                <i class="fa-brands fa-instagram"></i>
+                                <span>Instagram</span>
+                            </a>
+                        </div>
+                        <div class="social-contact-item">
+                            <a href="https://www.linkedin.com/in/yourprofile" class="social-contact-link linkedin" target="_blank">
+                                <i class="fa-brands fa-linkedin"></i>
+                                <span>LinkedIn</span>
+                            </a>
+                        </div>
+                        <div class="social-contact-item">
+                            <a href="mailto:your.email@example.com" class="social-contact-link email">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span>Email Me</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- BACK TO TOP -->
             <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>0%</a>
@@ -916,6 +1291,167 @@
 
     <!-- Custom JS link -->
     <script src="./assets/js/script.js"></script>
+
+    <!-- Additional JavaScript for modal and contact form -->
+    <script>
+        // Image Modal Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all gallery cards with data-modal-image attribute
+            const galleryCards = document.querySelectorAll('[data-modal-image]');
+            const modal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalSubtitle = document.getElementById('modalSubtitle');
+            const modalClose = document.querySelector('#imageModal .modal-close');
+
+            // For each gallery card, add click event to open modal
+            galleryCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // If clicked on a link inside the card, don't open modal
+                    if (e.target.tagName === 'A' || e.target.closest('a')) {
+                        return;
+                    }
+
+                    // Prevent default behavior
+                    e.preventDefault();
+
+                    // Get image source, title and subtitle from data attributes
+                    const imgSrc = this.getAttribute('data-modal-image');
+                    const title = this.getAttribute('data-modal-title');
+                    const subtitle = this.getAttribute('data-modal-subtitle');
+
+                    // Set modal content and preload image
+                    const preloadImg = new Image();
+                    preloadImg.src = imgSrc;
+                    preloadImg.onload = function() {
+                        // Image loaded, now show the modal
+                        modalImage.src = imgSrc;
+                        modalImage.alt = title;
+                        modalTitle.textContent = title;
+                        modalSubtitle.textContent = subtitle;
+
+                        // Show modal with animation
+                        modal.classList.add('show');
+                        setTimeout(() => {
+                            modal.querySelector('.modal-content').style.opacity = '1';
+                        }, 50);
+
+                        // Disable scrolling on body
+                        document.body.style.overflow = 'hidden';
+                    };
+                });
+            });
+
+            // Close modal when clicking on close button
+            modalClose.addEventListener('click', function() {
+                closeImageModal();
+            });
+
+            // Close modal when clicking outside of modal content
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeImageModal();
+                }
+            });
+
+            // Close modal when pressing ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.classList.contains('show')) {
+                    closeImageModal();
+                }
+            });
+
+            // Function to close image modal
+            function closeImageModal() {
+                const modalContent = modal.querySelector('.modal-content');
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'translateY(50px)';
+
+                setTimeout(() => {
+                    modal.classList.remove('show');
+                    document.body.style.overflow = '';
+                    // Reset transform after animation completes
+                    setTimeout(() => {
+                        modalContent.style.transform = '';
+                    }, 300);
+                }, 300);
+            }
+
+            // Contact Modal Functionality
+            const contactModal = document.getElementById('contactModal');
+            const openContactBtn = document.getElementById('openContactModal');
+            const closeContactBtn = document.getElementById('closeContactModal');
+
+            // Open contact modal
+            openContactBtn.addEventListener('click', function() {
+                contactModal.classList.add('show');
+                setTimeout(() => {
+                    contactModal.querySelector('.modal-content').style.opacity = '1';
+                }, 50);
+
+                document.body.style.overflow = 'hidden';
+            });
+
+            // Close contact modal
+            closeContactBtn.addEventListener('click', function() {
+                closeContactModal();
+            });
+
+            // Close when clicking outside
+            contactModal.addEventListener('click', function(e) {
+                if (e.target === contactModal) {
+                    closeContactModal();
+                }
+            });
+
+            // Function to close contact modal
+            function closeContactModal() {
+                const modalContent = contactModal.querySelector('.modal-content');
+                modalContent.style.opacity = '0';
+                modalContent.style.transform = 'translateY(50px)';
+
+                setTimeout(() => {
+                    contactModal.classList.remove('show');
+                    document.body.style.overflow = '';
+                    // Reset transform after animation completes
+                    setTimeout(() => {
+                        modalContent.style.transform = '';
+                    }, 300);
+                }, 300);
+            }
+        });
+
+        // Contact Form Submission
+        function submitContactForm(event) {
+            event.preventDefault();
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            // In a real implementation, you would send these values to a server
+            // For now, we'll just log them and show a success message
+            console.log('Form submitted with values:', {
+                name,
+                email,
+                subject,
+                message
+            });
+
+            // Show success message
+            document.getElementById('formSuccess').classList.add('show');
+
+            // Reset form
+            document.getElementById('contactForm').reset();
+
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('formSuccess').classList.remove('show');
+            }, 5000);
+        }
+    </script>
 </body>
 
 </html>
